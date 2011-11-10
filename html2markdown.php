@@ -331,13 +331,15 @@ class HTML_Parser
 			
 			$count = 1;
 			foreach ($lines as $line) {
-				$line = trim($line, '&#xD;');
+				//$line = trim($line, '&#xD;');
+				$line = str_replace('&#xD;', '', $line);
 				$markdown .= "    ".$line;
 				// Add newlines, except final line of the code
 				if ($count != $total) $markdown .= HTML2MD_NEWLINE;
 				$count++;
 			}
 			$markdown .= HTML2MD_NEWLINE;
+			$markdown = html_entity_decode($markdown, ENT_QUOTES, 'UTF-8');
 
 		} else { # There's only one line of code. It's a code span, not a block. Just wrap it with backticks.
 
