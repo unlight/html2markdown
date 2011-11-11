@@ -54,17 +54,26 @@ class HTML_Parser
 
 	}
 
-
-	private static function has_parent_code($node) {
+	/**
+	* Returns true, if node can be converted to markdown.
+	* In element inside non-convertable tags such as <table>
+	* or element inside code it can be converted.
+	* 
+	* @param DomNode $node
+	* @return bool $Result.
+	*/
+	private static function can_convert($node) {
 		for ($p = $node->parentNode; $p != false; $p = $p->parentNode) {
-			if (is_null($p)) return false;
-			if ($p->nodeName == 'code') return true;
+			if ($p->nodeName == 'html') return true;
+			if ($p->nodeName == 'body') return true;
+			if ($p->nodeName == 'code') return false;
+			if (!self::is_convertable_tag($p->nodeName)) return false;
 		}
-		return false;
+		return true;
 	}
 	
 	private function convert_childs($node) {
-		if (self::has_parent_code($node)) return;
+		if (!self::can_convert($node)) return;
 		if ($node->hasChildNodes()) {
 			for ($length = $node->childNodes->length, $i = 0; $i < $length; $i++) {
 				$child = $node->childNodes->item($i);
@@ -103,6 +112,16 @@ class HTML_Parser
 		return $markdown;
 	}
 	
+	private static $_convertable = array(
+		'p', 'pre', 
+		'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
+		'em', 'i', 'strong', 'b', 'hr', 'br', 'blockquote', 'code',
+		'ol', 'ul', 'li', 'img', 'a'
+	);
+	
+	private static function is_convertable_tag($tag_name) {
+		return in_array($tag_name, self::$_convertable);
+	}
 	
 	# Convert the supplied element into it's markdown equivalent,
 	# then swap the original element in the DOM with the markdown
