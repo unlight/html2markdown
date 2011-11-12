@@ -146,7 +146,19 @@ body{font-family:helvetica, arial, sans;}
 		</ol>
 	</li>
 	<li>List 1c</li>
-</ul></textarea>
+</ul>
+
+<h4>Non-convertable HTML</h4>
+<var>$SomeVar</var>
+<table>
+  <tr><td>
+        <p><strong>Strong text inside table.</strong></p>
+  </tr></td>
+</table>
+
+<p><strong><em>The end.</em></strong></p>
+
+</textarea>
 			<?php endif; ?>
 			<input type="submit" value="Convert HTML to Markdown >>" name="submit">
 		</form>
