@@ -56,7 +56,7 @@ class HTML_Parser
 	}
 
 	/**
-	* Returns true, if node (html tag) has markdown equivalent.
+	* Returns true, if $node element has markdown equivalent.
 	* Return false, if element is inside a non-convertable tags such as <div>
 	* or element is inside a <code> tag.
 	* 
