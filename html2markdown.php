@@ -285,6 +285,8 @@ class HTML_Parser
 		
 		if ($title != ""){
 			$markdown = '['.$text.']('.$href.' "'.$title.'")';
+		} elseif ($text == $href) {
+			$markdown = '<'.$href.'>';
 		} else {
 			$markdown = '['.$text.']('.$href.')';
 		}
