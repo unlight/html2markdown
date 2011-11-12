@@ -122,6 +122,12 @@ class HTML_Parser
 		));
 	}
 	
+	/**
+	* Need to format result markdown text
+	*/
+	
+	private $prev_element_converted;
+	
 	# Convert the supplied element into its markdown equivalent,
 	# then swap the original element in the DOM with the markdown
 	# version as a #text node. This converts the HTML $doc into
@@ -132,6 +138,7 @@ class HTML_Parser
 	
 		$tag 	= $node->nodeName;	#the type of element, e.g. h1
 		$value 	= $node->nodeValue;	#the value of that element, e.g. The Title
+		$converted = true;
 	
 		switch ($tag)
 		{
@@ -197,7 +204,14 @@ class HTML_Parser
 				# It returns the full content of the node, including surrounding tags.
 				$markdown = $node->C14N();
 				
+				$converted = false;
+				if ($node->nodeName != '#text') {
+					$markdown .= HTML2MD_NEWLINE;
+					if (!$this->prev_element_converted) $markdown .= HTML2MD_NEWLINE;
+				}
 		}
+		
+		$this->prev_element_converted = $converted;
 	
 		#Create a DOM text node containing the markdown equivalent of the original node
 		$markdown_node = $this->doc->createTextNode($markdown);
